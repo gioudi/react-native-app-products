@@ -32,12 +32,29 @@ export const AuthProvider = ({children}: any) => {
         correo,
         password,
       });
+
+      dispatch({
+        type: 'signUp',
+        payload: {
+          token: resp.data.token,
+          user: resp.data.usuario,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const signUp = () => {
+    try {
+      const resp = await cafeApi.post<LoginResponse>('/auth/login', {
+        correo,
+        password,
+      });
       console.log(resp.data);
     } catch (error) {
       console.log(error);
     }
   };
-  const signUp = () => {};
   const logOut = () => {};
   const removeError = () => {};
 
