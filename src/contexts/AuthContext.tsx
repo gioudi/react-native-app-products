@@ -1,4 +1,5 @@
-import React, {createContext, useReducer} from 'react';
+import React, {createContext, useEffect, useReducer} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import cafeApi from '../api/cafeApi';
 import {LoginData, LoginResponse, User} from '../interfaces/appInterfaces';
 import {authReducer, AuthState} from './AuthReducer';
@@ -26,6 +27,17 @@ export const AuthContext = createContext({} as AuthContextProps);
 export const AuthProvider = ({children}: any) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const checkToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      return dispatch({type: 'notAuthenticated'});
+    }
+  };
+
   const signIn = async ({correo, password}: LoginData) => {
     try {
       const resp = await cafeApi.post<LoginResponse>('/auth/login', {
@@ -40,23 +52,23 @@ export const AuthProvider = ({children}: any) => {
           user: resp.data.usuario,
         },
       });
+
+      await AsyncStorage.setItem('token', resp.data.token);
     } catch (error) {
       console.log(error);
-    }
-  };
-  const signUp = () => {
-    try {
-      const resp = await cafeApi.post<LoginResponse>('/auth/login', {
-        correo,
-        password,
+      dispatch({
+        type: 'addError',
+        payload: 'error' || 'There is a wrong information',
       });
-      console.log(resp.data);
-    } catch (error) {
-      console.log(error);
     }
   };
+  const signUp = async () => {};
   const logOut = () => {};
-  const removeError = () => {};
+  const removeError = () => {
+    dispatch({
+      type: 'removeError',
+    });
+  };
 
   return (
     <AuthContext.Provider
