@@ -79,7 +79,7 @@ export const AuthProvider = ({children}: any) => {
   };
   const signUp = async ({correo, password, nombre}: RegisterData) => {
     try {
-      const resp = await cafeApi.post('/auth/usuarios', {
+      const resp = await cafeApi.post('/usuarios', {
         correo,
         password,
         nombre,
