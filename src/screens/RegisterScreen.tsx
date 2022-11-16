@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,16 +7,19 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
+  Alert,
 } from 'react-native';
 
 import {WhiteLogo} from '../components/WhiteLogo';
 import {useForm} from '../hooks/useForm';
 import {loginStyles} from '../themes/loginThemes';
 import {StackScreenProps} from '@react-navigation/stack';
+import {AuthContext} from '../contexts/AuthContext';
 
 interface Props extends StackScreenProps<any, any> {}
 
 export const RegisterScreen = ({navigation}: Props) => {
+  const {signUp, errorMessage, removeError} = useContext(AuthContext);
   const {email, password, name, form, onChange} = useForm({
     name: '',
     email: '',
@@ -25,7 +28,19 @@ export const RegisterScreen = ({navigation}: Props) => {
 
   const onRegister = () => {
     Keyboard.dismiss();
+    signUp({correo: email, password: password, nombre: name});
   };
+  useEffect(() => {
+    if (errorMessage.length === 0) {
+      return;
+    }
+    Alert.alert('We have a problem', errorMessage, [
+      {
+        text: 'Understood',
+        onPress: removeError,
+      },
+    ]);
+  });
   return (
     <>
       <KeyboardAvoidingView

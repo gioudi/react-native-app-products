@@ -1,7 +1,12 @@
 import React, {createContext, useEffect, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import cafeApi from '../api/cafeApi';
-import {LoginData, LoginResponse, User} from '../interfaces/appInterfaces';
+import {
+  LoginData,
+  LoginResponse,
+  RegisterData,
+  User,
+} from '../interfaces/appInterfaces';
 import {authReducer, AuthState} from './AuthReducer';
 
 type AuthContextProps = {
@@ -9,7 +14,7 @@ type AuthContextProps = {
   token: string | null;
   user: User;
   status: 'checking' | 'authenticated' | 'not-authenticated';
-  signUp: () => void;
+  signUp: (registerData: RegisterData) => void;
   signIn: (loginData: LoginData) => void;
   logOut: () => void;
   removeError: () => void;
@@ -36,6 +41,16 @@ export const AuthProvider = ({children}: any) => {
     if (!token) {
       return dispatch({type: 'notAuthenticated'});
     }
+
+    const {data} = await cafeApi.get('/auth');
+
+    dispatch({
+      type: 'signUp',
+      payload: {
+        token: data.token,
+        user: data.usuario,
+      },
+    });
   };
 
   const signIn = async ({correo, password}: LoginData) => {
@@ -62,8 +77,35 @@ export const AuthProvider = ({children}: any) => {
       });
     }
   };
-  const signUp = async () => {};
-  const logOut = () => {};
+  const signUp = async ({correo, password, nombre}: RegisterData) => {
+    try {
+      const resp = await cafeApi.post('/auth/usuarios', {
+        correo,
+        password,
+        nombre,
+      });
+      dispatch({
+        type: 'signUp',
+        payload: {
+          token: resp.data.token,
+          user: resp.data.usuario,
+        },
+      });
+
+      await AsyncStorage.setItem('token', resp.data.token);
+    } catch (error) {
+      dispatch({
+        type: 'addError',
+        payload: 'error' || 'We had a wrong, try again later please!',
+      });
+    }
+  };
+  const logOut = async () => {
+    await AsyncStorage.removeItem('token');
+    dispatch({
+      type: 'logout',
+    });
+  };
   const removeError = () => {
     dispatch({
       type: 'removeError',
