@@ -24,7 +24,8 @@ export const ProductScreen = ({route, navigation}: Props) => {
   const {id = '', name = ''} = route.params;
 
   const {categories} = useCategories();
-  const {loadProductById} = React.useContext(ProductsContext);
+  const {loadProductById, addProduct, updateProduct} =
+    React.useContext(ProductsContext);
 
   const {_id, categoriaId, nombre, img, setFormValue} = useForm({
     _id: id,
@@ -34,10 +35,20 @@ export const ProductScreen = ({route, navigation}: Props) => {
   });
   React.useEffect(() => {
     navigation.setOptions({
-      title: name ? name : 'Nuevo producto',
+      title: name ? name : 'Did not find',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [nombre]);
+
+  const saveOrUpdate = async () => {
+    if (id.length > 0) {
+      updateProduct(categoriaId, nombre, id);
+    } else {
+      const tempCategoriaId = categoriaId || categories[0]._id;
+      const newProduct = await addProduct(tempCategoriaId, nombre);
+      onChange(newProduct._id, '_id');
+    }
+  };
 
   const loadProduct = async () => {
     if (id.length === 0) {
@@ -56,6 +67,7 @@ export const ProductScreen = ({route, navigation}: Props) => {
     loadProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -83,25 +95,33 @@ export const ProductScreen = ({route, navigation}: Props) => {
           style={{backgroundColor: '#5856d6'}}>
           <Text style={{...styles.title, color: 'white'}}>Create</Text>;
         </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 10,
-          }}>
-          <TouchableOpacity
-            onPress={() => {}}
-            style={{backgroundColor: '#5856d6'}}>
-            <Text style={{...styles.title, color: 'white'}}>
-              Take a picture
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {}}
-            style={{backgroundColor: '#5856d6'}}>
-            <Text style={{...styles.title, color: 'white'}}>Upload local</Text>;
-          </TouchableOpacity>
-        </View>
+        {_id.length > 0 && (
+          <>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                onPress={saveOrUpdate}
+                style={{backgroundColor: '#5856d6'}}>
+                <Text style={{...styles.title, color: 'white'}}>
+                  Take a picture
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{backgroundColor: '#5856d6'}}>
+                <Text style={{...styles.title, color: 'white'}}>
+                  Upload local
+                </Text>
+                ;
+              </TouchableOpacity>
+            </View>
+            ;
+          </>
+        )}
         {img.length > 0 && (
           <Image style={{...styles.containerImage}} source={{uri: img}} />
         )}
