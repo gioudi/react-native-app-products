@@ -20,7 +20,7 @@ interface Props extends StackScreenProps<any, any> {}
 
 export const LoginScreen = ({navigation}: Props) => {
   const {signIn, errorMessage, removeError} = useContext(AuthContext);
-  const {email, password, form, onChange} = useForm({
+  const {email, password, onChange} = useForm({
     email: '',
     password: '',
   });

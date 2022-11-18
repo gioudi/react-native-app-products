@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {createContext, useEffect, useState} from 'react';
 import cafeApi from '../api/cafeApi';
 import {Producto, ProductsResponse} from '../interfaces/appInterfaces';
@@ -13,7 +15,7 @@ type ProductsContextProps = {
   ) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   loadProductById: (id: string) => Promise<Producto>;
-  uploadImage: (data: any, id: string) => Promise<void>; 
+  uploadImage: (data: any, id: string) => Promise<void>;
 };
 
 export const ProductsContext = createContext({} as ProductsContextProps);

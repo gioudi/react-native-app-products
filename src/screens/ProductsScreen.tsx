@@ -1,14 +1,7 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import * as React from 'react';
 import {useContext, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  _Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {ProductsContext} from '../contexts/ProductsContext';
 import {ProductsStackParmas} from '../navigator/ProductsNavigator';
 
@@ -16,7 +9,7 @@ interface Props
   extends StackScreenProps<ProductsStackParmas, 'ProductsScreen'> {}
 
 export const ProductsScreen = ({navigation}: Props) => {
-  const {products, loadProducts} = useContext(ProductsContext);
+  const {products} = useContext(ProductsContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -27,6 +20,7 @@ export const ProductsScreen = ({navigation}: Props) => {
         </TouchableOpacity>
       ),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

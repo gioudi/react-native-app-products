@@ -20,11 +20,12 @@ export const ProductScreen = ({route, navigation}: Props) => {
     navigation.setOptions({
       title: name ? name : 'Nuevo producto',
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.label}>Name Product</Text>
+        <Text style={styles.label}>{id}Name Product</Text>
         <TextInput placeholder="Name product" style={styles.textInput} />
         <Text style={styles.label}>Select Category</Text>;{/*Picker*/}
         <TouchableOpacity

@@ -20,7 +20,7 @@ interface Props extends StackScreenProps<any, any> {}
 
 export const RegisterScreen = ({navigation}: Props) => {
   const {signUp, errorMessage, removeError} = useContext(AuthContext);
-  const {email, password, name, form, onChange} = useForm({
+  const {email, password, name, onChange} = useForm({
     name: '',
     email: '',
     password: '',
@@ -130,15 +130,8 @@ export const RegisterScreen = ({navigation}: Props) => {
           </View>
           <TouchableOpacity
             style={{
+              ...loginStyles.registerButton,
               ...loginStyles.appButton,
-              position: 'absolute',
-              top: 50,
-              left: 20,
-              borderWidth: 1,
-              borderColor: 'white',
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-              borderRadius: 100,
             }}
             onPress={() => navigation.navigate('LoginScreen')}
             activeOpacity={0.8}>

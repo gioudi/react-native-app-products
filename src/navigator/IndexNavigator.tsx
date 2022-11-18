@@ -32,7 +32,6 @@ export const IndexNavigator = () => {
             name="ProductsNavigator"
             component={ProductsNavigator}
           />
-          ;
         </>
       )}
     </Stack.Navigator>

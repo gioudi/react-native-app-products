@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, Button} from 'react-native';
 import {AuthContext} from '../contexts/AuthContext';
 
 export const ProtectedScreen = () => {
-  const {user, token, logOut} = useContext(AuthContext);
+  const {user, logOut} = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
