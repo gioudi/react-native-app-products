@@ -5,9 +5,14 @@ import * as React from 'react';
 import {IndexNavigator} from './src/navigator/IndexNavigator';
 import {NavigationContainer} from '@react-navigation/native';
 import {AuthProvider} from './src/contexts/AuthContext';
+import {ProductsProvider} from './src/contexts/ProductsContext';
 
 const AppState = ({children}: any) => {
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <AuthProvider>
+      <ProductsProvider>{children}</ProductsProvider>
+    </AuthProvider>
+  );
 };
 const App = () => {
   return (
