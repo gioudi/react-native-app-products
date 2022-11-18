@@ -1,8 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
-import {useContext} from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
-import {AuthContext} from '../contexts/AuthContext';
 import {ProductScreen} from '../screens/ProductScreen';
 import {ProductsScreen} from '../screens/ProductsScreen';
 

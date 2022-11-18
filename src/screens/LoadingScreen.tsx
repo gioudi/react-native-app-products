@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 
 export const LoadingScreen = () => {
   return (

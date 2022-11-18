@@ -131,8 +131,6 @@ export const RegisterScreen = ({navigation}: Props) => {
           <TouchableOpacity
             style={{
               ...loginStyles.appButton,
-              borderWidth: 0,
-              borderColor: 'transparent',
               position: 'absolute',
               top: 50,
               left: 20,

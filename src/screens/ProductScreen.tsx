@@ -1,7 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import * as React from 'react';
-import {useContext} from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {ProductsStackParmas} from '../navigator/ProductsNavigator';
 
 interface Props

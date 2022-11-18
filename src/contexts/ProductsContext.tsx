@@ -13,7 +13,7 @@ type ProductsContextProps = {
   ) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   loadProductById: (id: string) => Promise<Producto>;
-  uploadImage: (data: any, id: string) => Promise<void>; // TODO: cambiar ANY
+  uploadImage: (data: any, id: string) => Promise<void>; 
 };
 
 export const ProductsContext = createContext({} as ProductsContextProps);

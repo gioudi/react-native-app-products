@@ -5,7 +5,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   FlatList,
   _Text,
   TouchableOpacity,
@@ -14,7 +13,7 @@ import {ProductsContext} from '../contexts/ProductsContext';
 import {ProductsStackParmas} from '../navigator/ProductsNavigator';
 
 interface Props
-  extends StackScreenProps<ProductsStackParmas, 'ProductScreen'> {}
+  extends StackScreenProps<ProductsStackParmas, 'ProductsScreen'> {}
 
 export const ProductsScreen = ({navigation}: Props) => {
   const {products, loadProducts} = useContext(ProductsContext);
@@ -22,14 +21,13 @@ export const ProductsScreen = ({navigation}: Props) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity style={ } onPress={() => navigation.navigate('ProductScreen', {})}>
-            <Text style={styles.title}>New Product</Text>;
-          </TouchableOpacity>
-      )    
-    })
-  },[])
-
-
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ProductScreen', {})}>
+          <Text style={styles.title}>New Product</Text>;
+        </TouchableOpacity>
+      ),
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -39,7 +37,13 @@ export const ProductsScreen = ({navigation}: Props) => {
         data={products}
         keyExtractor={p => p._id}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={()=>navigation.navigate('ProductScreen'{id: item._id, name: item.nombre})}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ProductScreen', {
+                id: item._id,
+                name: item.nombre,
+              })
+            }>
             <Text style={styles.title}>{item.nombre}</Text>;
           </TouchableOpacity>
         )}
