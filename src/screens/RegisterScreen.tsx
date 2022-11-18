@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,20 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
+  Alert,
 } from 'react-native';
 
 import {WhiteLogo} from '../components/WhiteLogo';
 import {useForm} from '../hooks/useForm';
 import {loginStyles} from '../themes/loginThemes';
 import {StackScreenProps} from '@react-navigation/stack';
+import {AuthContext} from '../contexts/AuthContext';
 
 interface Props extends StackScreenProps<any, any> {}
 
 export const RegisterScreen = ({navigation}: Props) => {
-  const {email, password, name, form, onChange} = useForm({
+  const {signUp, errorMessage, removeError} = useContext(AuthContext);
+  const {email, password, name, onChange} = useForm({
     name: '',
     email: '',
     password: '',
@@ -25,7 +28,19 @@ export const RegisterScreen = ({navigation}: Props) => {
 
   const onRegister = () => {
     Keyboard.dismiss();
+    signUp({correo: email, password: password, nombre: name});
   };
+  useEffect(() => {
+    if (errorMessage.length === 0) {
+      return;
+    }
+    Alert.alert('We have a problem', errorMessage, [
+      {
+        text: 'Understood',
+        onPress: removeError,
+      },
+    ]);
+  });
   return (
     <>
       <KeyboardAvoidingView
@@ -115,17 +130,8 @@ export const RegisterScreen = ({navigation}: Props) => {
           </View>
           <TouchableOpacity
             style={{
+              ...loginStyles.registerButton,
               ...loginStyles.appButton,
-              borderWidth: 0,
-              borderColor: 'transparent',
-              position: 'absolute',
-              top: 50,
-              left: 20,
-              borderWidth: 1,
-              borderColor: 'white',
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-              borderRadius: 100,
             }}
             onPress={() => navigation.navigate('LoginScreen')}
             activeOpacity={0.8}>
