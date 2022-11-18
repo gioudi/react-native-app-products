@@ -28,5 +28,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Execute lint JS
         run: npm run lint
-      - name: Execute lint CSS
-        run: npm run lint:style
