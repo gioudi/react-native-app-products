@@ -9,9 +9,11 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 import {ProductsStackParmas} from '../navigator/ProductsNavigator';
 import {Picker} from '@react-native-picker/picker';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useCategories} from '../hooks/useCategories';
 import {useForm} from '../hooks/useForm';
 import {onChange} from 'react-native-reanimated';
@@ -22,9 +24,9 @@ interface Props
 
 export const ProductScreen = ({route, navigation}: Props) => {
   const {id = '', name = ''} = route.params;
-
+  const [tempUri, setTempUri] = useState<string>();
   const {categories} = useCategories();
-  const {loadProductById, addProduct, updateProduct} =
+  const {loadProductById, addProduct, updateProduct, uploadImage} =
     React.useContext(ProductsContext);
 
   const {_id, categoriaId, nombre, img, setFormValue} = useForm({
@@ -68,6 +70,46 @@ export const ProductScreen = ({route, navigation}: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const takePhoto = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        quality: 0.5,
+      },
+      resp => {
+        if (resp.didCancel) {
+          return;
+        }
+        if (!resp.uri) {
+          return;
+        }
+
+        setTempUri(resp.uri);
+        uploadImage(resp, _id);
+      },
+    );
+  };
+
+  const takePhotoGallery = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 0.5,
+      },
+      resp => {
+        if (resp.didCancel) {
+          return;
+        }
+        if (!resp.uri) {
+          return;
+        }
+
+        setTempUri(resp.uri);
+        uploadImage(resp, _id);
+      },
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -91,7 +133,7 @@ export const ProductScreen = ({route, navigation}: Props) => {
           ))}
         </Picker>
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={saveOrUpdate}
           style={{backgroundColor: '#5856d6'}}>
           <Text style={{...styles.title, color: 'white'}}>Create</Text>;
         </TouchableOpacity>
@@ -104,14 +146,14 @@ export const ProductScreen = ({route, navigation}: Props) => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={saveOrUpdate}
+                onPress={takePhoto}
                 style={{backgroundColor: '#5856d6'}}>
                 <Text style={{...styles.title, color: 'white'}}>
                   Take a picture
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {}}
+                onPress={takePhotoGallery}
                 style={{backgroundColor: '#5856d6'}}>
                 <Text style={{...styles.title, color: 'white'}}>
                   Upload local
@@ -119,11 +161,13 @@ export const ProductScreen = ({route, navigation}: Props) => {
                 ;
               </TouchableOpacity>
             </View>
-            ;
           </>
         )}
-        {img.length > 0 && (
+        {img.length > 0 && !tempUri && (
           <Image style={{...styles.containerImage}} source={{uri: img}} />
+        )}
+        {tempUri && (
+          <Image style={{...styles.containerImage}} source={{uri: tempUri}} />
         )}
       </ScrollView>
     </View>
